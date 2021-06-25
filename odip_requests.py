@@ -4,8 +4,7 @@
 import json
 from requests import post, get
 
-BASE_URL = "http://127.0.0.1:5000"
-#BASE_URL = "http://ec2-18-130-251-69.eu-west-2.compute.amazonaws.com"
+BASE_URL = "http://127.0.0.1:5001"
 
 # GET all enquiries
 # response = get(BASE_URL + "/get-all-enquiries")
@@ -15,8 +14,7 @@ BASE_URL = "http://127.0.0.1:5000"
 
 # CREATE a new enquiry
 data = {
-    "id": "hnjknlsaa8327343",
-    "first_name": "Bob",
+    "first_name": "vs_oDip_API1",
     "last_name": "Smith",
     "building": "11",
     "street": "Indigo Avenue",
@@ -35,5 +33,6 @@ data = {
 
 # response = post(BASE_URL + "/send_enquiry")
 
+# print(BASE_URL + "/send-enquiry")
 response = post(BASE_URL + "/send-enquiry", json = data)
 print(response.text)
