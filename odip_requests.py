@@ -1,16 +1,11 @@
-""" DB Requests
+""" odip Requests
 """
 
 import json
 from requests import post, get
 
-BASE_URL = "http://127.0.0.1:5001"
-
-# GET all enquiries
-# response = get(BASE_URL + "/get-all-enquiries")
-# response_data = json.dumps(response.text)
-# print(response.text)
-
+# oDip Endpoint
+BASE_URL = "http://ec2-18-168-225-13.eu-west-2.compute.amazonaws.com"
 
 # CREATE a new enquiry
 data = {
@@ -31,8 +26,14 @@ data = {
     "ltv_value": "5"
 }
 
-# response = post(BASE_URL + "/send_enquiry")
+response = get(BASE_URL)
+print("GET Healthcheck... (/)")
+print("Response: " + response.text)
 
-# print(BASE_URL + "/send-enquiry")
+response = get(BASE_URL + "/log")
+print("GET Log... (/log)")
+print("Response: " + response.text)
+
 response = post(BASE_URL + "/send-enquiry", json = data)
-print(response.text)
+print("POST New Enquiry... (/send-enquiry)")
+print("Response: " + response.text)

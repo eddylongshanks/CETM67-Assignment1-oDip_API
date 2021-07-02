@@ -1,4 +1,4 @@
-""" Script for oDip API
+""" oDip API
 """
 
 from flask import Flask, request, jsonify
@@ -17,24 +17,22 @@ class SendEnquiry(Resource):
     def post(self):
         try:            
             data = request.json
+
+            # dump the data to a json string and then reload it back into json
+            # helps to identify invalid json data
             json_data = json.loads(json.dumps(data))
 
             response = post(SNS_API, headers=API_HEADERS, json=json_data)
 
             log(response.text)
 
-            return {
-                'statusCode': response.status_code,
-                'body': json.dumps(str(response.text))
-            }
+            response_message = str(response.text)
+            return response_object(response.status_code, response_message)
 
         except Exception as e:
             log(e)
-            return {
-                'statusCode': 500,
-                'body': json.dumps(str(e))
-            }
-            raise
+            response_message = str(type(e).__name__) + ": " + str(e)
+            return response_object(500, response_message)
 
 
 class GetLog(Resource):
@@ -45,10 +43,8 @@ class GetLog(Resource):
 
 class HealthCheck(Resource):
     def get(self):
-        return {
-            'statusCode': 200,
-            'body': 'oDip API Available'
-        }
+        response_message = 'oDip API Available'
+        return response_object(200, response_message)
 
 ## Routing ##
 api.add_resource(SendEnquiry, '/send-enquiry')
@@ -61,6 +57,13 @@ def log(data_to_save):
     # Logs data to a local file for debugging
     with open('odip_log.txt', 'w') as log_file:
         log_file.write(str(data_to_save))
+   
+def response_object(status_code, message):
+    # encapsulates the return object
+    return {
+        'statusCode': status_code,
+        'body': message
+    }
 
 if __name__ == "__main__":
     app.run(debug=True, port=5001)
